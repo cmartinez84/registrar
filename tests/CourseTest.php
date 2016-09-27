@@ -157,11 +157,34 @@
             $new_course = new Course(null, "php", "PHP 101");
             $new_course->save();
 
-            $new_course->addStudent($new_student->getId());
+            $new_course->addStudent([$new_student->getId()]);
 
             $this->assertEquals([$new_student], $new_course->getStudents());
+        }
+        function test_addStudent_duplicates()
+        {
+            $new_student = new Student(null, "bob", "1-11-1999");
+            $new_student->save();
+            $new_course = new Course(null, "php", "PHP 101");
+            $new_course->save();
 
+            $new_course->addStudent([$new_student->getId()]);
+            $new_course->addStudent([$new_student->getId()]);
 
+            $this->assertEquals([$new_student], $new_course->getStudents());
+        }
+        function test_getStudents(){
+            $new_student = new Student(null, "bob", "1-11-1999");
+            $new_student->save();
+            $new_student2 = new Student(null, "bob", "1-11-1999");
+            $new_student2->save();
+            $new_course = new Course(null, "php", "PHP 101");
+            $new_course->save();
+
+            $new_course->addStudent([$new_student->getId()]);
+            $new_course->addStudent([$new_student2->getId()]);
+
+            $this->assertEquals([$new_student, $new_student2], $new_course->getStudents());
         }
     }
 ?>

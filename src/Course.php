@@ -76,9 +76,24 @@
                 $this->setName($name);
                 $this->setCourseNumber($course_number);
         }
-        function addStudent($student_id)
+        function addStudent($student_ids)
         {
-            $GLOBALS['DB']->exec("INSERT INTO students_courses (student_id, course_id) VALUES ({$student_id}, {$this->getId()});");
+
+                $returned_students = $this->getStudents();
+
+                foreach ($student_ids as $student_id){
+                    $alreadyEnrolled = false;
+                    foreach ($returned_students as $student) {
+                        if ($student->getId() == $student_id) {
+                            $alreadyEnrolled = true;
+                        }
+                    }
+                    if ($alreadyEnrolled == false) {
+                        $GLOBALS['DB']->exec("INSERT INTO students_courses (student_id, course_id) VALUES ({$student_id}, {$this->getId()});");
+                    }
+                }
+        
+
         }
         function getStudents()
         {

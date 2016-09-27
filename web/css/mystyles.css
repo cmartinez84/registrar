@@ -1,5 +1,5 @@
 body{
-    
+
     background-color: 	black;
 }
 h1{
@@ -17,12 +17,8 @@ h1{
     font-size: 5em;
     position: fixed;
 }
-.navbar{
-    background: black;
-    color: white;
-}
-.navbar-nav >li>a {
-    color: white !important;
+.addStudents{
+    overflow: scroll;
 }
 .panel{
     display: none;

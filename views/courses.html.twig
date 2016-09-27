@@ -6,7 +6,7 @@
     <body>
         <h1>All Courses</h1>
         <div class="container">
-            <div class="well">
+            <div class="well row">
                 {% if courses is not empty %}
                     <ul>
                         {% for course in courses %}
@@ -30,29 +30,57 @@
                 <a href="/" class="btn btn-warning">Home</a>
             </div>
             {% if course %}
-            <div class="well">
-                <h2>Edit Course Information:</h2>
-                <form class="" action="/courses/edit/{{course.getId}}" method="post">
-                    <input type="hidden" name="_method" value="patch">
-                    <div class="form-group">
-                        <label for="">Edit Course Name:</label>
-                        <input type="text" name="name" value="{{course.getName}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Edit Course Number:</label>
-                        <input type="text" name="course_number" value="{{course.getCourseNumber}}">
-                    </div>
-                    <button class="btn btn-info" type="submit" name="button">Update</button>
-                </form>
-                <form class="" action="/courses/delete/{{course.getId}}" method="post">
-                    <input type="hidden" name="_method" value="delete">
-                    <button class="btn btn-danger" type="submit">Delete</button>
-                </form>
+            <div class="well row ">
+                    <h2>{{course.getCourseNumber}} - {{course.getName}}</h2>
+                <div class="col-sm-4">
+                    <h3>Edit Course Information:</h3>
+                    <form class="" action="/courses/edit/{{course.getId}}" method="post">
+                        <input type="hidden" name="_method" value="patch">
+                        <div class="form-group">
+                            <label for="">Edit Course Name:</label>
+                            <input class="form-control" type="text" name="name" value="{{course.getName}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Edit Course Number:</label>
+                            <input class="form-control" type="text" name="course_number" value="{{course.getCourseNumber}}">
+                        </div>
+                        <button class="btn btn-info" type="submit" name="button">Update</button>
+                    </form>
+                    <form class="" action="/courses/delete/{{course.getId}}" method="post">
+                        <input type="hidden" name="_method" value="delete">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+                <div class="col-sm-4">
+                    <h3>Students Enrolled:</h3>
+                    {% if courseStudents is not empty%}
+                    <ul>
+                        {% for student in courseStudents %}
+                            <li> <a href="/students/{{student.getId}}">{{student.getName}}</a> </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                <div class="addStudents col-sm-4">
+                    <h3>Add Students</h3>
+                    {% if allStudents is not empty%}
+                    <form action="/courses/{{course.getId}}" method="post">
+                        <input type="hidden" name="student_ids[]" value="none">
+                        {% for student in allStudents %}
+
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="student_ids[]" value="{{student.getId}}">{{student.getName}}</label>
+                        </div>
+                        {% endfor %}
+                        <div class="checkbox">
+                            <label><input id="select_all" type="checkbox" name="student_ids[]"/>Check All</label>
+                        </div>
+                        <button class="btn btn-info" type="submit" name="button">Add Students</button>
+                    </form>
+                    {% endif %}
+                </div>
             </div>
-
             {% endif %}
-
-
         </div>
 
 
