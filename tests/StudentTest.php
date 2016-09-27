@@ -6,6 +6,7 @@
     */
 
     require_once "src/Student.php";
+    require_once "src/Course.php";
 
     $server = 'mysql:host=localhost;dbname=registrar_test';
     $username = 'root';
@@ -17,6 +18,7 @@
     {
         protected function tearDown(){
             Student::deleteAll();
+            Course::deleteAll();
         }
 
         function test_getId()
@@ -105,6 +107,58 @@
             $result = [$found_student->getName(), $found_student->getEnrollment()];
 
             $this->assertEquals([$new_name, $new_enrollment], $result);
+        }
+
+        function test_addCourse()
+        {
+            $test_student = new Student(null, "barbara", "1-11-1999");
+            $test_student->save();
+
+            $test_course = new Course(null, "PHP", "PHP 101");
+            $test_course->save();
+
+            $test_student->addCourse($test_course->getId());
+
+            $result = $test_student->getCourses();
+
+            $this->assertEquals([$test_course], $result);
+        }
+
+        function test_getCourses()
+        {
+            $test_student = new Student(null, "barbara", "1-11-1999");
+            $test_student->save();
+
+            $test_course = new Course(null, "PHP", "PHP 101");
+            $test_course->save();
+            $test_course2 = new Course(null, "Java", "Java 101");
+            $test_course2->save();
+
+            $test_student->addCourse($test_course->getId());
+            $test_student->addCourse($test_course2->getId());
+
+            $result = $test_student->getCourses();
+
+            $this->assertEquals([$test_course, $test_course2], $result);
+        }
+
+        function test_removeCourse()
+        {
+            $test_student = new Student(null, "barbara", "1-11-1999");
+            $test_student->save();
+
+            $test_course = new Course(null, "PHP", "PHP 101");
+            $test_course->save();
+            $test_student->addCourse($test_course->getId());
+            $test_course2 = new Course(null, "Java", "Java 101");
+            $test_course2->save();
+            $test_student->addCourse($test_course2->getId());
+
+            $test_student->removeCourse($test_course->getId());
+
+            $result = $test_student->getCourses();
+
+            $this->assertEquals([$test_course2], $result);
         }
     }
 ?>

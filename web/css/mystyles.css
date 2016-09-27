@@ -11,6 +11,10 @@ h1{
     text-shadow: 0px 0px 11px white !important;
 }
 
+.inline {
+    display: inline-block;
+}
+
 .home-button{
     font-size: 5em;
     position: fixed;

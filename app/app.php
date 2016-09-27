@@ -28,30 +28,43 @@
     });
 
     $app->get('/students', function() use ($app) {
-        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>null));
+        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>null, 'allCourses'=>Course::getAll()));
     });
 
     $app->post('/students', function() use ($app) {
         $new_student = new Student(null, $_POST['name'], $_POST['enrollment']);
         $new_student-> save();
-        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>$new_student));
+        $new_student->addCourse($_POST['course_id']);
+        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>$new_student, 'allCourses'=>Course::getAll(), 'studentCourses'=>$new_student->getCourses()));
     });
 
     $app->get('/students/{id}', function($id) use ($app) {
         $found_student = Student::find($id);
-        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student' => $found_student));
+        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student' => $found_student, 'allCourses'=>Course::getAll(), 'studentCourses'=>$found_student->getCourses()));
     });
 
     $app->delete('/students/delete/{id}', function($id) use ($app) {
         $new_student = Student::find($id);
         $new_student-> delete();
-        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>null));
+        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>null, 'allCourses'=>Course::getAll()));
     });
 
     $app->patch('/students/edit/{id}', function($id) use ($app) {
         $found_student = Student::find($id);
         $found_student-> update($_POST['name'], $_POST['enrollment']);
-        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>$found_student));
+        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>$found_student, 'allCourses'=>Course::getAll(), 'studentCourses'=>$found_student->getCourses()));
+    });
+
+    $app->post('/students/add/{id}', function($id) use ($app) {
+        $found_student = Student::find($id);
+        $found_student-> addCourse($_POST['course_id']);
+        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>$found_student, 'allCourses'=>Course::getAll(), 'studentCourses'=>$found_student->getCourses()));
+    });
+
+    $app->delete('/students/remove/{id}', function($id) use ($app) {
+        $found_student = Student::find($id);
+        $found_student-> removeCourse($_POST['course_id']);
+        return $app['twig']->render('students.html.twig', array('students' => Student::getAll(), 'student'=>$found_student, 'allCourses'=>Course::getAll(), 'studentCourses'=>$found_student->getCourses()));
     });
 
     $app->get('/courses', function() use ($app) {
