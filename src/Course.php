@@ -38,16 +38,6 @@
             $GLOBALS['DB']->exec("DELETE FROM courses WHERE id={$this->getid()};");
         }
 
-        // function getClients($search_id){
-        //     $all_clients = Client::getAll();
-        //     $matched_clients = array();
-        //     foreach($all_clients as $client){
-        //         if($client->getStylistId() == $search_id){
-        //             array_push($matched_clients, $client);
-        //         }
-        //     }
-        //     return $matched_clients;
-        // }
 
         static function find($search_id){
             $returned_courses = Course::getAll();
@@ -72,17 +62,41 @@
             }
             return $courses;
         }
-        static function deleteAll(){
+        static function deleteAll()
+        {
             $GLOBALS['DB']->exec("DELETE FROM courses;");
         }
 
-        function update($name, $course_number){
+        function update($name, $course_number)
+        {
             $GLOBALS['DB']->exec("UPDATE courses SET
                 name ='{$name}',
                 course_number = '{$course_number}'
                 WHERE id ='{$this->getId()}';");
                 $this->setName($name);
                 $this->setCourseNumber($course_number);
+        }
+        function addStudent($student_id)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO students_courses (student_id, course_id) VALUES ({$student_id}, {$this->getId()});");
+        }
+        function getStudents()
+        {
+            $returned_students = $GLOBALS['DB']->query("SELECT students.* FROM courses
+                JOIN students_courses ON(students_courses.course_id = courses.id)
+                JOIN students ON(students.id = students_courses.student_id)
+                WHERE courses.id = {$this->getId()};"
+            );
+            $students = array();
+            foreach ($returned_students as $student){
+                $id = $student['id'];
+                $name = $student['name'];
+                $enrollment = $student['enrollment'];
+                $found_student = new Student($id, $name, $enrollment);
+                array_push($students, $found_student);
+
+            }
+            return $students;
         }
 
     }

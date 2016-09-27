@@ -151,5 +151,17 @@
 
             $this->assertEquals($new_name, $result);
         }
+        function test_addStudent(){
+            $new_student = new Student(null, "bob", "1-11-1999");
+            $new_student->save();
+            $new_course = new Course(null, "php", "PHP 101");
+            $new_course->save();
+
+            $new_course->addStudent($new_student->getId());
+
+            $this->assertEquals([$new_student], $new_course->getStudents());
+
+
+        }
     }
 ?>
