@@ -89,6 +89,12 @@
         }
         return $app['twig']->render('courses.html.twig', array('courses' => Course::getAll(), 'course'=>$found_course, 'courseStudents' => $found_course->getStudents(), 'allStudents' => Student::getAll()));
     });
+    $app->delete('/courses/remove/{id}', function($id) use ($app) {
+        $found_course =  Course::find($id);
+        $found_course->removeStudent($_POST['student_id']);
+        return $app['twig']->render('courses.html.twig', array('courses' => Course::getAll(), 'course'=>$found_course, 'courseStudents' => $found_course->getStudents(), 'allStudents' => Student::getAll()));
+    });
+
 
     $app->patch('/courses/edit/{id}', function($id) use ($app) {
         $found_course =  Course::find($id);

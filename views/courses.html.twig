@@ -4,59 +4,53 @@
         <title>University Registrar</title>
     </head>
     <body>
-        <h1>All Courses</h1>
         <div class="container">
-            <div class="well row">
-                {% if courses is not empty %}
-                    <ul>
-                        {% for course in courses %}
-                            <a href='/courses/{{ course.getId }}'><li>{{ course.getCourseNumber }} - {{ course.getName }}</li></a>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-                <h2>Add a new Course</h2>
-                <form  action="/courses" method="post">
-                    <div class="form-group">
-                        <label for="">Course Name:</label>
-                        <input class="form-control" type="text" name="name" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Course Number</label>
-                        <input class="form-control" type="text" name="course_number" value="">
-                    </div>
-
-                    <button class="btn btn-info" type="submit" name="button">Submit</button>
-                </form>
-                <a href="/" class="btn btn-warning">Home</a>
+            <div class="row logoRow">
+                <a href="/"><img id="logo" src="/img/logo.png" alt="" /></a>
             </div>
-            {% if course %}
-            <div class="well row ">
-                    <h2>{{course.getCourseNumber}} - {{course.getName}}</h2>
-                <div class="col-sm-4">
-                    <h3>Edit Course Information:</h3>
-                    <form class="" action="/courses/edit/{{course.getId}}" method="post">
-                        <input type="hidden" name="_method" value="patch">
+            <h1>All Courses</h1>
+            <div class="well row">
+                <div class='col-sm-6'>
+                    <h3>Add a new Course</h3>
+                    <form  action="/courses" method="post">
                         <div class="form-group">
-                            <label for="">Edit Course Name:</label>
-                            <input class="form-control" type="text" name="name" value="{{course.getName}}">
+                            <label for="">Course Name:</label>
+                            <input class="form-control" type="text" name="name" value="">
                         </div>
                         <div class="form-group">
-                            <label for="">Edit Course Number:</label>
-                            <input class="form-control" type="text" name="course_number" value="{{course.getCourseNumber}}">
+                            <label for="">Course Number</label>
+                            <input class="form-control" type="text" name="course_number" value="">
                         </div>
-                        <button class="btn btn-info" type="submit" name="button">Update</button>
-                    </form>
-                    <form class="" action="/courses/delete/{{course.getId}}" method="post">
-                        <input type="hidden" name="_method" value="delete">
-                        <button class="btn btn-danger" type="submit">Delete</button>
+
+                        <button class="btn btn-info" type="submit" name="button">Submit</button>
                     </form>
                 </div>
+                <div class='col-sm-6'>
+                    <h3>All Courses</h3>
+                    {% if courses is not empty %}
+                        <ul>
+                            {% for course in courses %}
+                                <a href='/courses/{{ course.getId }}'><li>{{ course.getCourseNumber }} - {{ course.getName }}</li></a>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            {% if course %}
+            <h1>Course Information</h1>
+            <div class="well row ">
+                <h2>{{course.getCourseNumber}} - {{course.getName}}</h2>
                 <div class="col-sm-4">
                     <h3>Students Enrolled:</h3>
                     {% if courseStudents is not empty%}
                     <ul>
                         {% for student in courseStudents %}
-                            <li> <a href="/students/{{student.getId}}">{{student.getName}}</a> </li>
+                            <li class = "listWithTrash"> <a href="/students/{{student.getId}}">{{student.getName}}</a>
+                                <form class='inline' action="/courses/remove/{{course.getId}}" method="post">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <input type="hidden" name="student_id" value="{{student.getId}}">
+                                    <button class="trash" type='submit' ><span class='glyphicon glyphicon-trash'></span></button>
+                                </form> </li>
                         {% endfor %}
                     </ul>
                     {% endif %}
@@ -78,6 +72,25 @@
                         <button class="btn btn-info" type="submit" name="button">Add Students</button>
                     </form>
                     {% endif %}
+                </div>
+                <div class="col-sm-4">
+                    <h3>Edit Course Information:</h3>
+                    <form class="" action="/courses/edit/{{course.getId}}" method="post">
+                        <input type="hidden" name="_method" value="patch">
+                        <div class="form-group">
+                            <label for="">Edit Course Name:</label>
+                            <input class="form-control" type="text" name="name" value="{{course.getName}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Edit Course Number:</label>
+                            <input class="form-control" type="text" name="course_number" value="{{course.getCourseNumber}}">
+                        </div>
+                        <button class="btn btn-info" type="submit" name="button">Update</button>
+                    </form>
+                    <form class="" action="/courses/delete/{{course.getId}}" method="post">
+                        <input type="hidden" name="_method" value="delete">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
                 </div>
             </div>
             {% endif %}

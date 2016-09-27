@@ -8,7 +8,21 @@ h1{
     color: white;
     text-shadow: 0px 0px 11px white !important;
 }
-
+button.trash{
+    border: none;
+    background: transparent;
+    font-size: .8em;
+}
+button.trash:hover{
+    color:red;
+}
+.logoRow{
+    text-align: center;
+    margin-top: 10px;
+}
+ .listWithTrash{
+    padding: 2px !important;
+}
 .inline {
     display: inline-block;
 }

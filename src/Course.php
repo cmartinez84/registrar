@@ -92,7 +92,7 @@
                         $GLOBALS['DB']->exec("INSERT INTO students_courses (student_id, course_id) VALUES ({$student_id}, {$this->getId()});");
                     }
                 }
-        
+
 
         }
         function getStudents()
@@ -112,6 +112,10 @@
 
             }
             return $students;
+        }
+        function removeStudent($student_id)
+        {
+            $GLOBALS['DB']->exec("DELETE FROM students_courses WHERE student_id = {$student_id} AND course_id = {$this->getId()};");
         }
 
     }

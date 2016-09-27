@@ -4,65 +4,78 @@
         <title>University Registrar</title>
     </head>
     <body>
+
         <div class='container'>
-                <h1>All Students</h1>
-            <div class="well">
-                {% if students is not empty %}
-                    <ul>
-                        {% for student in students %}
-                            <a href='/students/{{ student.getId }}'><li>{{ student.getName }} - {{ student.getEnrollment }}</li></a>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-                <form action='/students' method='post'>
-                    <h3>Add a New Student</h3>
-                    <div class='form-group'>
-                        <label>Name:</label>
-                        <input type='text' name='name' class='form-control'>
-                    </div>
-                    <div class='form-group'>
-                        <label>Enrollment Date:</label>
-                        <input type='date' name='enrollment' class='form-control'>
-                    </div>
-                    {% if allCourses %}
+            <div class="row logoRow">
+                <a href="/"><img id="logo" src="/img/logo.png" alt="" /></a>
+            </div>
+            <h1>All Students</h1>
+            <div class="well row">
+                <div class="col-sm-6">
+                    <form action='/students' method='post'>
+                        <h3>Add a New Student</h3>
                         <div class='form-group'>
-                            <label>Add a Course:</label>
-                            <select name='course_id'>
-                                <option selected value='none'></option>
-                                {% for course in allCourses %}
-                                    <option value='{{course.getId}}'>{{ course.getCourseNumber }} - {{ course.getName }}</option>
-                                {% endfor %}
-                            </select>
+                            <label>Name:</label>
+                            <input type='text' name='name' class='form-control'>
                         </div>
+                        <div class='form-group'>
+                            <label>Enrollment Date:</label>
+                            <input type='date' name='enrollment' class='form-control'>
+                        </div>
+                        {% if allCourses %}
+                            <div class='form-group'>
+                                <label>Add a Course:</label>
+                                <select class="form-control" name='course_id'>
+                                    <option selected value='none'></option>
+                                    {% for course in allCourses %}
+                                        <option value='{{course.getId}}'>{{ course.getCourseNumber }} - {{ course.getName }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+                        <button type='submit' class='btn btn-info'>Enroll</button>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <h3>All Students</h3>
+                    {% if students is not empty %}
+                        <ul>
+                            {% for student in students %}
+                                <a href='/students/{{ student.getId }}'><li>{{ student.getName }} - {{ student.getEnrollment }}</li></a>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
-                    <button type='submit' class='btn btn-info'>Enroll</button>
-                </form>
-                <a class='btn btn-warning' href='/'>Home</a>
+                </div>
+
             </div>
             {% if student is not empty %}
-                <div class="well">
-                    <p>Name: {{student.getName}}</p>
+            <h1>Student Information</h1>
+                <div class="well row">
+                    <div class="col-sm-4">
+                    <h2>{{student.getName}}</h2>
                     <p>Enrollment: {{student.getEnrollment}}</p>
                     <h4>All Courses:</h4>
                     {% if studentCourses %}
                         <ul>
                         {% for course in studentCourses %}
-                            <li>{{ course.getCourseNumber }} - {{ course.getName }}
+                            <li class = "listWithTrash"><a href='/courses/{{course.getId}}'>{{ course.getCourseNumber }} - {{ course.getName }}</a>
                                 <form class='inline' action="/students/remove/{{student.getId}}" method="post">
                                     <input type="hidden" name="_method" value="delete">
                                     <input type="hidden" name="course_id" value="{{course.getId}}">
-                                    <button type='submit' class='btn-xs btn-danger'><span class='glyphicon glyphicon-trash'></span></button>
+                                    <button type='submit' class='trash'><span class='glyphicon glyphicon-trash'></span></button>
                                 </form>
                             </li>
                         {% endfor %}
                         </ul>
                     {% endif %}
-                    <hr>
+
+                </div>
+                    <div class="col-sm-4">
                     {% if allCourses %}
-                        <h2>Add a Course</h2>
+                        <h3>Add a Course</h3>
                         <form action="/students/add/{{student.getId}}" method="post">
                             <label>Courses:</label>
-                            <select name='course_id'>
+                            <select class="form-control" name='course_id'>
                                 <option disabled selected value></option>
                                 {% for course in allCourses %}
                                     <option value='{{course.getId}}'>{{ course.getCourseNumber }} - {{ course.getName }}</option>
@@ -71,19 +84,22 @@
                             <button type='submit' class='btn btn-info'>Add</button>
                         </form>
                     {% endif %}
-                    <h2>Edit</h2>
+                </div>
+                    <div class="col-sm-4">
+                    <h3>Edit</h3>
                     <form class="" action="/students/edit/{{student.getId}}" method="post">
                         <input type="hidden" name="_method" value="patch">
                         <label for="">Edit Name:</label>
-                        <input type="text" name="name" value="{{student.getName}}">
+                        <input class="form-control" type="text" name="name" value="{{student.getName}}">
                         <label for="">Edit Enrollment Date:</label>
-                        <input type="date" name="enrollment" value="{{student.getEnrollment}}">
+                        <input class="form-control" type="date" name="enrollment" value="{{student.getEnrollment}}">
                         <button class="btn btn-info" type="submit" name="button">Update</button>
                     </form>
                     <form action="/students/delete/{{student.getId}}" method="post">
                         <input type="hidden" name="_method" value="delete">
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>
+                </div>
                 </div>
             {% endif%}
         </div>
