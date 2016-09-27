@@ -68,13 +68,13 @@
     });
 
     $app->get('/courses', function() use ($app) {
-        return $app['twig']->render('courses.html.twig', array('courses' => Course::getAll(), 'course'=>null));
+        return $app['twig']->render('courses.html.twig', array('courses' => Course::getAll(), 'course'=>null, 'courseStudents' => null, 'allStudents' => Student::getAll()));
     });
 
     $app->post('/courses', function() use ($app) {
         $new_course = new Course(null, $_POST['name'], $_POST['course_number']);
         $new_course->save();
-        return $app['twig']->render('courses.html.twig', array('courses' => Course::getAll(), 'course'=>$new_course));
+        return $app['twig']->render('courses.html.twig', array('courses' => Course::getAll(), 'course'=>$new_course, 'courseStudents' => $new_course->getStudents(), 'allStudents' => Student::getAll()));
     });
 
     $app->get('/courses/{id}', function($id) use ($app) {
