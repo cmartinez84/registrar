@@ -85,7 +85,7 @@
         {
             $returned_students = $GLOBALS['DB']->query("SELECT students.* FROM departments
                 JOIN students_departments ON (students_departments.department_id = departments.id)
-                JOIN students ON(students.id = students_departments.id)
+                JOIN students ON(students.id = students_departments.students_id)
                 WHERE departments.id={$this->getId()};"
             );
             $students = array();
